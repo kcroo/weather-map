@@ -1,1 +1,6 @@
-{{ weather }}
+<app-location-forecast
+    *ngFor="let forecast of forecasts"
+    [forecast]="forecast"
+>
+
+</app-location-forecast>

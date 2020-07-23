@@ -8,12 +8,12 @@ import { WeatherService } from '../../services/weather.service'
   styleUrls: ['./weather-viewer.component.css']
 })
 export class WeatherViewerComponent implements OnInit {
-  weather;
+  forecasts: Object[];
   constructor(private _weatherService:WeatherService) { }
 
   ngOnInit(): void {
     this._weatherService.getForecast().subscribe(data => {
-      this.weather = JSON.stringify(data);
+      this.forecasts = data;
       //this.weather = data;
       console.log(data);
     });
