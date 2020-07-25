@@ -12,9 +12,8 @@ export class WeatherViewerComponent implements OnInit {
   constructor(private _weatherService:WeatherService) { }
 
   ngOnInit(): void {
-    this._weatherService.getForecast().subscribe(data => {
+    this._weatherService.getDailyForecast().subscribe(data => {
       this.forecasts = data;
-      //this.weather = data;
       console.log(data);
     });
   }
