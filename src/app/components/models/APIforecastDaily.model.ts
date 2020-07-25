@@ -17,7 +17,7 @@ interface DetailsDaily {
     dew_point?: number;
     wind_speed?: number;
     wind_deg?: number;
-    weather?: DetailsWeather;
+    weather?: DetailsWeather[];
     clouds?: string;
     pop?: number;
     rain?: number;

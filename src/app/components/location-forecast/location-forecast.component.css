@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: space-between;
+    text-align: center;
+    width: 100vw;
+}
+
+.day {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: stretch;
+    align-content: space-between;
+    background-color: skyblue;
+    padding: 15px;
+    border: 2px solid black;
+}
+
+.item {
+    padding: 10px;
+}
+
+.weather-icon {
+    max-width: 50px;
+}
