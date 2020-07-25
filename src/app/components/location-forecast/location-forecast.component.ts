@@ -1,12 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-
-interface forecastAPIFormat {
-  cod?: string;
-  message?: number;
-  cnt?: number;
-  // make another interface for rest of it to
-  // https://stackoverflow.com/questions/50541000/typescript-how-to-create-nested-interface-for-json-object
-}
+import { ForecastFiveDay } from '../models/forecastFiveDay.model'
 
 @Component({
   selector: 'app-location-forecast',
@@ -15,7 +8,7 @@ interface forecastAPIFormat {
 })
 export class LocationForecastComponent implements OnInit {
 
-  @Input() forecast: forecastAPIFormat;
+  @Input() forecast: ForecastFiveDay;
 
   constructor() { }
 
