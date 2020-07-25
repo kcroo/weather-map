@@ -11,7 +11,7 @@
     <h2>Forecast for {{ forecast.lat }}, {{ forecast.lon }}</h2>
     <ul>
         <li *ngFor="let item of forecast.daily">
-           {{ getMonthAndDate(item.dt) }}: {{ roundNumber(item.temp.max) }}
+           {{ getDayOfWeek(item.dt) }} - {{ getMonthAndDate(item.dt) }}: {{ roundNumber(item.temp.max) }}
         </li>
      </ul>
 </div>
