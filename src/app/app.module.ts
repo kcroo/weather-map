@@ -10,6 +10,9 @@ import { WeatherViewerComponent } from './components/weather-viewer/weather-view
 import { LocationForecastComponent } from './components/location-forecast/location-forecast.component';
 import { MapComponent } from './components/map/map.component';
 
+/* reference for dynamic custom component in leaflet map popup: https://github.com/Asymmetrik/ngx-leaflet/issues/178
+*/
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,6 +26,7 @@ import { MapComponent } from './components/map/map.component';
     AppRoutingModule,
     LeafletModule
   ],
+  // dynamic component for forecast popup on map
   entryComponents: [
     LocationForecastComponent
   ],
@@ -31,8 +35,8 @@ import { MapComponent } from './components/map/map.component';
 })
 export class AppModule {
   constructor(private injector: Injector) {
+    // register custom popup element with browser for forecast popup on map
     const PopupElement = createCustomElement(LocationForecastComponent, {injector});
-    // Register the custom element with the browser.
     customElements.define('popup-element', PopupElement);
   }
  }
