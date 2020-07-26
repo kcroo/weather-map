@@ -1,9 +1,16 @@
 <div class="container">
-    <app-location-forecast
+    <!-- <app-location-forecast
     *ngFor="let forecast of forecasts"
     [forecast]="forecast"
     >
 
-    </app-location-forecast>  
+    </app-location-forecast>   -->
+    
+    <div *ngIf="forecasts">
+        <app-map
+        [forecasts]="forecasts">
+        </app-map>
+    </div>
+    
 </div>
 

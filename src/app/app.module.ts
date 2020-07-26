@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WeatherViewerComponent } from './components/weather-viewer/weather-viewer.component';
 import { LocationForecastComponent } from './components/location-forecast/location-forecast.component';
+import { MapComponent } from './components/map/map.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WeatherViewerComponent,
-    LocationForecastComponent
+    LocationForecastComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
