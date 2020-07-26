@@ -1,7 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, Injector, Input, OnInit } from '@angular/core';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { ForecastFiveDay } from '../models/APIforecastFiveDay.model'
 import { ForecastDaily } from '../models/APIforecastDaily.model'
-import * as L from 'leaflet';
+import { LocationForecastComponent } from '../location-forecast/location-forecast.component'
+import { featureGroup, tileLayer, latLng, marker, Marker, FeatureGroup } from 'leaflet';
 
 
 @Component({
@@ -11,32 +13,43 @@ import * as L from 'leaflet';
 })
 export class MapComponent implements OnInit {
   @Input() forecasts: ForecastDaily[];
-  isUndefined: boolean;
-  map;
+  options: Object;
+  layers: Marker[] = [];
+  pointsGroup: FeatureGroup = featureGroup();
+  bounds = null;
 
-  constructor() { }
+  constructor(
+    private _injector: Injector,
+    private _resolver: ComponentFactoryResolver,
+    private _leaflet: LeafletModule ) { }
+    
 
   ngOnInit(): void {
+    this.options = {
+      layers: [tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      })],
+      zoom: 5
+    };
+
     this.initMap();
   }
 
   initMap() {
-    this.map = L.map('map');
-    const pointsLayer = L.featureGroup();
-
+    // create marker for each forecast location
     this.forecasts.forEach(fc => {
-      const latLong = L.latLng([fc.lat, fc.lon]);
-      const point = L.marker(latLong)
-        .bindPopup(`${fc.lat},${fc.lon}`)
-        .addTo(this.map);
-      pointsLayer.addLayer(point);
+      const latLong = latLng([fc.lat, fc.lon]);
+      const point = marker(latLong)
+        .bindPopup(`${fc.lat}, ${fc.lon}`);
+
+      // layers group -> auto added to map
+      this.layers.push(point);
+
+      // points group -> used for bounds
+      this.pointsGroup.addLayer(point);
     });
 
-    this.map.fitBounds(pointsLayer.getBounds());
-
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.map);
+    // fit to bounds of all markers
+    this.bounds = this.pointsGroup.getBounds();
   }
-
 }

@@ -1,4 +1,9 @@
-<div id="map"></div>
+<div id="map" leaflet
+    [leafletOptions]="options"
+    [leafletLayers]="layers"
+    [leafletFitBounds]="bounds"
+    >
+</div>
 
 <div *ngFor="let forecast of forecasts">
     <p>{{ forecast.lat }}, {{ forecast.lon }}</p>

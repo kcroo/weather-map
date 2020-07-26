@@ -6,6 +6,7 @@
 
     </app-location-forecast>   -->
     
+    <!-- ngIf prevents forecasts being undefined in app-map -->
     <div *ngIf="forecasts">
         <app-map
         [forecasts]="forecasts">

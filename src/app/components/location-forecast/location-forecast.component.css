@@ -5,7 +5,9 @@
     align-items: stretch;
     align-content: space-between;
     text-align: center;
-    width: 100vw;
+    /* width: 100vw; */
+    width: 200px;
+    height: 100px;
 }
 
 .day {
@@ -17,6 +19,8 @@
     background-color: skyblue;
     padding: 15px;
     border: 2px solid black;
+    width: 200px;
+    height: 100px;
 }
 
 .item {
