@@ -7,22 +7,20 @@
      </ul>
 </div> -->
 
-<div>
-    <h2>Forecast for {{ forecast.lat }}, {{ forecast.lon }}</h2>
-    <div class="container">
-        <div class="day" *ngFor="let item of forecast.daily">
-           <div class="item">
-            {{ getDayOfWeek(item.dt) }}
-           </div>
-           <div class="item">
-            {{ getMonthAndDate(item.dt) }}
-           </div>
-           <div class="item">
-              <img class="weather-icon" src="http://openweathermap.org/img/wn/{{item.weather[0].icon}}.png" alt="">
-           </div>
-           <div class="item">
-            {{ roundNumber(item.temp.max) }}
-           </div>
-        </div>
-     </div>
+
+<div class="container">
+   <div class="day" *ngFor="let item of forecast.daily">
+      <div class="item">
+      {{ getDayOfWeek(item.dt) }}
+      </div>
+      <div class="item">
+      {{ getMonthAndDate(item.dt) }}
+      </div>
+      <div class="item">
+         <img class="weather-icon" src="http://openweathermap.org/img/wn/{{item.weather[0].icon}}.png" alt="">
+      </div>
+      <div class="item">
+      {{ roundNumber(item.temp.max) }} / {{ roundNumber(item.temp.min) }}
+      </div>
+   </div>
 </div>

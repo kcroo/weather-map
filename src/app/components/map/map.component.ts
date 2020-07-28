@@ -41,6 +41,12 @@ export class MapComponent implements OnInit {
   initMap() {
     // create marker for each forecast location and create custom popup component containing forecast info
     this.forecasts.forEach(fc => {
+      const options = {
+        autoClose: false,
+        closeOnClick: false,
+        maxWidth: 1200,
+        maxHeight: 150
+      }
       const latLong = latLng([fc.lat, fc.lon]);
       const point = marker(latLong);
         point.bindPopup( () => {
@@ -51,7 +57,7 @@ export class MapComponent implements OnInit {
           // Add to the DOM
           document.body.appendChild(popupEl);
           return popupEl;
-        }).openPopup();
+        }, options);
 
       // layers group -> auto added to map
       this.layers.push(point);
