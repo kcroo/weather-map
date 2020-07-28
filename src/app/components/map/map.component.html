@@ -2,5 +2,7 @@
     [leafletOptions]="options"
     [leafletLayers]="layers"
     [leafletFitBounds]="bounds"
+    (leafletMapReady)="onMapReady($event)"
+    (leafletMapZoomStart)="onZoom()"
     >
 </div>

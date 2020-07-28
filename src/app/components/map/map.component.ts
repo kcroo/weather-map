@@ -4,7 +4,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { ForecastFiveDay } from '../models/APIforecastFiveDay.model'
 import { ForecastDaily } from '../models/APIforecastDaily.model'
 import { LocationForecastComponent } from '../location-forecast/location-forecast.component'
-import { featureGroup, tileLayer, latLng, marker, popup, Marker, FeatureGroup } from 'leaflet';
+import { featureGroup, tileLayer, latLng, Map, marker, popup, Marker, FeatureGroup } from 'leaflet';
 import { I18nSelectPipe } from '@angular/common';
 
 
@@ -19,6 +19,7 @@ export class MapComponent implements OnInit {
   layers: Marker[] = [];
   pointsGroup: FeatureGroup = featureGroup();
   bounds = null;
+  map: Map = null;
 
   constructor(
     private _injector: Injector,
@@ -35,7 +36,7 @@ export class MapComponent implements OnInit {
     };
 
     this.initMap();
-    this.openAllPopups();
+    //this.openAllPopups();
   }
 
   initMap() {
@@ -49,15 +50,16 @@ export class MapComponent implements OnInit {
       }
       const latLong = latLng([fc.lat, fc.lon]);
       const point = marker(latLong);
-        point.bindPopup( () => {
-          // create location-forecast-component and set its @Input forecast
-          const popupEl: NgElement & WithProperties<LocationForecastComponent> = document.createElement('popup-element') as any;
-          popupEl.forecast = fc;
 
-          // Add to the DOM
-          document.body.appendChild(popupEl);
-          return popupEl;
-        }, options);
+      point.bindPopup( () => {
+        // create location-forecast-component and set its @Input forecast
+        const popupEl: NgElement & WithProperties<LocationForecastComponent> = document.createElement('popup-element') as any;
+        popupEl.forecast = fc;
+
+        // Add to the DOM
+        document.body.appendChild(popupEl);
+        return popupEl;
+      }, options);
 
       // layers group -> auto added to map
       this.layers.push(point);
@@ -76,5 +78,26 @@ export class MapComponent implements OnInit {
         layer.openPopup();
       });
     }, 200);
+  }
+
+  onMapReady(map: Map) {
+    this.map = map;
+    this.onZoom();
+  }
+
+  onZoom() {
+    if(this.map) {
+      const zoomLevel: number = this.map.getZoom();
+      console.log(`zoomLevel: ${zoomLevel}`)
+      if (zoomLevel <= 10) {
+        this.layers.forEach(layer => {
+          layer.closePopup();
+        });
+      // } else {
+      //   this.layers.forEach(layer => {
+      //     layer.openPopup();
+      //   });
+      }
+    }
   }
 }
