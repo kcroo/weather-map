@@ -25,4 +25,5 @@ html, body {
 
 .flex-item {
     align-self: center;
+    flex: 1 1 auto;         /* grow, shrink, and basis (default space); the same for all items by default */
 }
