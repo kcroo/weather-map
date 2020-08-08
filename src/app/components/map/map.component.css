@@ -12,13 +12,15 @@
 }
 
 .forecastContainer {
-    height: 200px;
+    height: 150px;
     width: 70vw;
     display: inline-block;
+    margin-bottom: 10px;
 }
 
 .noForecast {
-    height: 200px;
+    height: 150px;
     text-align: center;
     display: inline-block;
+    margin-bottom: 10px;
 }
