@@ -1,19 +1,17 @@
-.container {
+.forecastContainer {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    /* overflow-x: auto;
-    overflow-y: hidden; */
     align-items: center;
     text-align: center;
     max-width: 1200px;
-    max-height: 150px;
+    height: 150px;
 }
 
 .day {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    flex: 1 1 auto;
     align-items: center;
     background-color: skyblue;
     padding: 2px;

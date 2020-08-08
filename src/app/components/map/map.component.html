@@ -1,5 +1,5 @@
 <div class="container">
-    <div *ngIf="forecast; else noForecast">
+    <div class="forecastContainer" *ngIf="forecast; else noForecast">
         <app-location-forecast
             [forecast]="forecast"
         >
@@ -7,10 +7,12 @@
     </div>
 
     <ng-template #noForecast>
-        <p>Click a point to see its forecast.</p>
+        <div class="noForecast">
+            <p>Click a point to see its forecast.</p>
+        </div>
     </ng-template>  
 
-    <div id="map" leaflet
+    <div class="map" leaflet
         [leafletOptions]="options"
         [leafletLayers]="layers"
         [leafletFitBounds]="bounds"

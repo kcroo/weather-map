@@ -1,11 +1,4 @@
 <div class="container">
-    <!-- <app-location-forecast
-    *ngFor="let forecast of forecasts"
-    [forecast]="forecast"
-    >
-
-    </app-location-forecast>   -->
-
     <!-- ngIf prevents forecasts being undefined in app-map -->
     <div *ngIf="forecasts">
         <app-map
@@ -13,6 +6,4 @@
         >
         </app-map>
     </div>
-    
 </div>
-
