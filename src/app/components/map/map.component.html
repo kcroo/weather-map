@@ -1,8 +1,21 @@
-<div id="map" leaflet
-    [leafletOptions]="options"
-    [leafletLayers]="layers"
-    [leafletFitBounds]="bounds"
-    (leafletMapReady)="onMapReady($event)"
-    (leafletMapZoomStart)="onZoom()"
+<div class="container">
+    <div *ngIf="forecast; else noForecast">
+        <app-location-forecast
+            [forecast]="forecast"
+        >
+        </app-location-forecast>
+    </div>
+
+    <ng-template #noForecast>
+        <p>Click a point to see its forecast.</p>
+    </ng-template>  
+
+    <div id="map" leaflet
+        [leafletOptions]="options"
+        [leafletLayers]="layers"
+        [leafletFitBounds]="bounds"
+        (leafletMapReady)="onMapReady($event)"
+        (leafletMapZoomStart)="onZoom()"
     >
+    </div>
 </div>

@@ -1,11 +1,12 @@
-import { Component, ComponentFactoryResolver, Injector, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, Injector, Input, OnInit } from '@angular/core';
 import { NgElement, WithProperties } from '@angular/elements';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { ForecastFiveDay } from '../models/APIforecastFiveDay.model'
 import { ForecastDaily } from '../models/APIforecastDaily.model'
 import { LocationForecastComponent } from '../location-forecast/location-forecast.component'
-import { featureGroup, tileLayer, latLng, Map, marker, popup, Marker, FeatureGroup } from 'leaflet';
+//import { featureGroup, tileLayer, latLng, Map, marker, popup, Marker, FeatureGroup } from 'leaflet';
 import { I18nSelectPipe } from '@angular/common';
+import * as L from 'leaflet';
 
 
 @Component({
@@ -15,51 +16,41 @@ import { I18nSelectPipe } from '@angular/common';
 })
 export class MapComponent implements OnInit {
   @Input() forecasts: ForecastDaily[];
+  forecast: ForecastDaily = null;
   options: Object;
-  layers: Marker[] = [];
-  pointsGroup: FeatureGroup = featureGroup();
+  layers: L.Marker[] = [];
+  pointsGroup: L.FeatureGroup = L.featureGroup();
   bounds = null;
-  map: Map = null;
+  map: L.Map = null;
 
   constructor(
     private _injector: Injector,
     private _resolver: ComponentFactoryResolver,
-    private _leaflet: LeafletModule ) { }
+    private _leaflet: LeafletModule,
+    private _changeDetector: ChangeDetectorRef ) { }
     
 
   ngOnInit(): void {
+    this.initMap();
     this.options = {
-      layers: [tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      layers: [L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       })],
       zoom: 5
     };
-
-    this.initMap();
-    //this.openAllPopups();
   }
 
   initMap() {
     // create marker for each forecast location and create custom popup component containing forecast info
     this.forecasts.forEach(fc => {
-      const options = {
-        autoClose: false,
-        closeOnClick: false,
-        maxWidth: 1200,
-        maxHeight: 150
-      }
-      const latLong = latLng([fc.lat, fc.lon]);
-      const point = marker(latLong);
+      const latLong = L.latLng([fc.lat, fc.lon]);
+      const point = L.marker(latLong);
 
-      point.bindPopup( () => {
-        // create location-forecast-component and set its @Input forecast
-        const popupEl: NgElement & WithProperties<LocationForecastComponent> = document.createElement('popup-element') as any;
-        popupEl.forecast = fc;
-
-        // Add to the DOM
-        document.body.appendChild(popupEl);
-        return popupEl;
-      }, options);
+      // on marker click, must update forecast
+      // need to bind 'this', so that it refers to the angular MapComponent and not the leaflet object that was clicked
+      // also allows passing the forecast object to the onClick function
+      // similar to this: https://stackoverflow.com/questions/36234236/add-parameters-to-onclick-function      
+      point.on('click', this.onClick.bind(this, fc));
 
       // layers group -> auto added to map
       this.layers.push(point);
@@ -72,6 +63,14 @@ export class MapComponent implements OnInit {
     this.bounds = this.pointsGroup.getBounds();
   }
 
+  // when marker is clicked, want to change the active forecast and tell angular that something has changed
+  // changes that happen in leaflet are not auto-detected by angular -> must manually detect changes in this component and its children
+  // see 'Manually Triggering Change Detection' here: https://github.com/Asymmetrik/ngx-leaflet
+  onClick(fc) {
+    this.forecast = fc;
+    this._changeDetector.detectChanges();
+  }
+
   openAllPopups() {
     setTimeout( () => {
       this.layers.forEach(layer => {
@@ -80,8 +79,9 @@ export class MapComponent implements OnInit {
     }, 200);
   }
 
-  onMapReady(map: Map) {
+  onMapReady(map: L.Map) {
     this.map = map;
+    //this.initMap();
     this.onZoom();
   }
 
@@ -93,11 +93,8 @@ export class MapComponent implements OnInit {
         this.layers.forEach(layer => {
           layer.closePopup();
         });
-      // } else {
-      //   this.layers.forEach(layer => {
-      //     layer.openPopup();
-      //   });
       }
     }
   }
+
 }

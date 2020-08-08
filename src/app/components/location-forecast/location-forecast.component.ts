@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { ForecastFiveDay } from '../models/APIforecastFiveDay.model'
 import { ForecastDaily } from '../models/APIforecastDaily.model'
 
@@ -22,10 +22,16 @@ export class LocationForecastComponent implements OnInit {
   //@Input() forecast: ForecastFiveDay;
   @Input() forecast: ForecastDaily;
 
-  constructor() { }
-
   ngOnInit(): void {
   }
+
+  constructor(private cd: ChangeDetectorRef) { }
+  ngOnChanges(): void {
+    console.log('changed!');
+    this.cd.detectChanges();
+  }
+
+
 
   getMonthAndDate(unixTime: number): string {
     const date = new Date(unixTime * 1000);

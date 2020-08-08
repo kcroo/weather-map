@@ -1,14 +1,4 @@
-<!-- <div>
-    <h2>Forecast for {{ forecast.city.name }}</h2>
-    <ul>
-        <li *ngFor="let item of forecast.list">
-           {{item.main.temp_max}}
-        </li>
-     </ul>
-</div> -->
-
-
-<div class="container">
+<div id="forecastContainer" class="container">
    <div class="day" *ngFor="let item of forecast.daily">
       <div class="item">
       {{ getDayOfWeek(item.dt) }}
