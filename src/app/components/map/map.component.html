@@ -1,23 +1,23 @@
-<div class="flex-col map-forecast-container">
-    <div class="flex-item forecastContainer" *ngIf="forecast; else noForecast">
+<div class="map-forecast-container">
+    <div class="forecast-container" *ngIf="forecast; else noForecast">
         <app-location-forecast
             [forecast]="forecast"
         >
         </app-location-forecast>
     </div>
-
+    
     <ng-template #noForecast>
-        <div class="flex-item noForecast">
+        <div class="noForecast">
             <p>Click a point to see its forecast.</p>
         </div>
     </ng-template>  
-
-    <div class="flex-item map" leaflet
+    
+    <div class="map" leaflet
         [leafletOptions]="options"
         [leafletLayers]="layers"
         [leafletFitBounds]="bounds"
         (leafletMapReady)="onMapReady($event)"
         (leafletMapZoomStart)="onZoom()"
     >
-    </div>
+    </div>    
 </div>
