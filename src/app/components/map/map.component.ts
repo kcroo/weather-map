@@ -22,6 +22,25 @@ export class MapComponent implements OnInit {
   pointsGroup: L.FeatureGroup = L.featureGroup();
   bounds = null;
   map: L.Map = null;
+  
+  blueIcon: L.Icon = new L.Icon({
+    name: 'blueIcon',
+    iconUrl: 'assets/markers/marker-icon-blue.png',
+    shadowUrl: 'assets/markers/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });;
+  redIcon: L.Icon = new L.Icon({
+    name: 'redIcon',
+    iconUrl: 'assets/markers/marker-icon-red.png',
+    shadowUrl: 'assets/markers/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
 
   constructor(
     private _injector: Injector,
@@ -42,15 +61,23 @@ export class MapComponent implements OnInit {
 
   initMap() {
     // create marker for each forecast location and create custom popup component containing forecast info
+    // all markers start as blue
     this.forecasts.forEach(fc => {
       const latLong = L.latLng([fc.lat, fc.lon]);
-      const point = L.marker(latLong);
+      const point = L.marker(latLong, {
+        icon: this.blueIcon
+      });
 
       // on marker click, must update forecast
-      // need to bind 'this', so that it refers to the angular MapComponent and not the leaflet object that was clicked
+      // need to bind 'this', so that it refers to the angular MapComponent and not the leaflet click event
       // also allows passing the forecast object to the onClick function
-      // similar to this: https://stackoverflow.com/questions/36234236/add-parameters-to-onclick-function      
-      point.on('click', this.onClick.bind(this, fc));
+      // similar to this: https://stackoverflow.com/questions/36234236/add-parameters-to-onclick-function     
+      point.on('click', this.setForecast.bind(this, fc));
+
+      // on marker click, also change marker to red
+      point.on('click', event => {
+        this.setIcon(event);
+      });
 
       // layers group -> auto added to map
       this.layers.push(point);
@@ -66,9 +93,19 @@ export class MapComponent implements OnInit {
   // when marker is clicked, want to change the active forecast and tell angular that something has changed
   // changes that happen in leaflet are not auto-detected by angular -> must manually detect changes in this component and its children
   // see 'Manually Triggering Change Detection' here: https://github.com/Asymmetrik/ngx-leaflet
-  onClick(fc) {
+  setForecast(fc) {
     this.forecast = fc;
     this._changeDetector.detectChanges();
+  }
+
+  // switches the icon from blue to red or vice versa
+  setIcon(event: L.LeafletEvent) {
+    if (event.target.getIcon().options.name == 'redIcon') {
+      event.target.setIcon(this.blueIcon);
+    }
+    else if (event.target.getIcon().options.name == 'blueIcon') {
+      event.target.setIcon(this.redIcon);
+    }
   }
 
   openAllPopups() {
