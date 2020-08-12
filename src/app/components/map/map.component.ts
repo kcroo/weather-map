@@ -7,6 +7,7 @@ import { LocationForecastComponent } from '../location-forecast/location-forecas
 //import { featureGroup, tileLayer, latLng, Map, marker, popup, Marker, FeatureGroup } from 'leaflet';
 import { I18nSelectPipe } from '@angular/common';
 import * as L from 'leaflet';
+import { LocationMarker } from '../../../assets/LocationMarker'
 
 
 @Component({
@@ -22,25 +23,7 @@ export class MapComponent implements OnInit {
   pointsGroup: L.FeatureGroup = L.featureGroup();
   bounds = null;
   map: L.Map = null;
-  
-  blueIcon: L.Icon = new L.Icon({
-    name: 'blueIcon',
-    iconUrl: 'assets/markers/marker-icon-blue.png',
-    shadowUrl: 'assets/markers/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });;
-  redIcon: L.Icon = new L.Icon({
-    name: 'redIcon',
-    iconUrl: 'assets/markers/marker-icon-red.png',
-    shadowUrl: 'assets/markers/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
+
 
   constructor(
     private _injector: Injector,
@@ -64,9 +47,7 @@ export class MapComponent implements OnInit {
     // all markers start as blue
     this.forecasts.forEach(fc => {
       const latLong = L.latLng([fc.lat, fc.lon]);
-      const point = L.marker(latLong, {
-        icon: this.blueIcon
-      });
+      const point = new LocationMarker(latLong);
 
       // on marker click, must update forecast
       // need to bind 'this', so that it refers to the angular MapComponent and not the leaflet click event
@@ -76,7 +57,7 @@ export class MapComponent implements OnInit {
 
       // on marker click, also change marker to red
       point.on('click', event => {
-        this.setIcon(event);
+        event.target.setActive();
       });
 
       // layers group -> auto added to map
@@ -96,16 +77,6 @@ export class MapComponent implements OnInit {
   setForecast(fc) {
     this.forecast = fc;
     this._changeDetector.detectChanges();
-  }
-
-  // switches the icon from blue to red or vice versa
-  setIcon(event: L.LeafletEvent) {
-    if (event.target.getIcon().options.name == 'redIcon') {
-      event.target.setIcon(this.blueIcon);
-    }
-    else if (event.target.getIcon().options.name == 'blueIcon') {
-      event.target.setIcon(this.redIcon);
-    }
   }
 
   openAllPopups() {
